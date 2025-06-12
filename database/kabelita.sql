@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 07, 2025 at 06:49 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Jun 12, 2025 at 03:40 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,20 +29,22 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `gallery` (
   `id_gallery` varchar(100) NOT NULL,
+  `id_kategori` varchar(100) NOT NULL,
   `nama_gallery` varchar(100) NOT NULL,
   `ket` varchar(100) NOT NULL,
   `file` varchar(100) NOT NULL,
-  `tgl_upload` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `tgl_upload` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `gallery`
 --
 
-INSERT INTO `gallery` (`id_gallery`, `nama_gallery`, `ket`, `file`, `tgl_upload`) VALUES
-('2854bf67-6f53-11ee-8d63-93f0fa14750d', 'Berita Perusahaan', 'Libur tanggal merah hari waisak', 'cc5738766eaf8be3df395463c26c00bf.jpg', '2025-05-07 04:23:58'),
-('32007824-6f53-11ee-8d63-93f0fa14750d', 'Lowongan', 'Dibuka lowongan untuk lulusan S1', 'f45b8af4da585f4d28169dc6615da163.jpg', '2025-05-07 04:24:37'),
-('3c26117d-6f53-11ee-8d63-93f0fa14750d', 'Anniversary 15th', 'Memperingati tahun ke 15 PT. CRT Kabelita', 'd20da4ada29a7a87094ff33043d8cdb7.jpg', '2025-05-07 04:26:22');
+INSERT INTO `gallery` (`id_gallery`, `id_kategori`, `nama_gallery`, `ket`, `file`, `tgl_upload`) VALUES
+('2854bf67-6f53-11ee-8d63-93f0fa14750d', 'cat1', 'Berita Perusahaan', 'Libur tanggal merah hari waisak', 'cc5738766eaf8be3df395463c26c00bf.jpg', '2025-05-06 21:23:58'),
+('32007824-6f53-11ee-8d63-93f0fa14750d', 'cat2', 'Lowongan', 'Dibuka lowongan untuk lulusan S1', 'f45b8af4da585f4d28169dc6615da163.jpg', '2025-05-06 21:24:37'),
+('3c26117d-6f53-11ee-8d63-93f0fa14750d', '2b58f202-4794-11f0-99ab-f4b3012bd4f4', 'Anniversary 15th', 'Memperingati tahun ke 15 PT. CRT Kabelita', 'd20da4ada29a7a87094ff33043d8cdb7.jpg', '2025-06-12 14:01:58'),
+('7054a42c-479a-11f0-99ab-f4b3012bd4f4', '3fec3a8a-4794-11f0-99ab-f4b3012bd4f4', 'Charger', 'www', '4270bbce0b45c0af4950eac92165bfa7.png', '2025-06-12 14:35:08');
 
 -- --------------------------------------------------------
 
@@ -51,13 +53,13 @@ INSERT INTO `gallery` (`id_gallery`, `nama_gallery`, `ket`, `file`, `tgl_upload`
 --
 
 CREATE TABLE `karyawan` (
-  `id_karyawan` varchar(100) NOT NULL,
-  `nama_karyawan` varchar(100) NOT NULL,
-  `jk` varchar(2) NOT NULL,
-  `tempat_lahir` varchar(100) NOT NULL,
+  `id_karyawan` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_karyawan` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `jk` varchar(2) COLLATE utf8mb4_general_ci NOT NULL,
+  `tempat_lahir` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `tgl_lahir` date NOT NULL,
-  `alamat` varchar(100) NOT NULL,
-  `no_telp` varchar(100) NOT NULL
+  `alamat` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `no_telp` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -77,9 +79,21 @@ INSERT INTO `karyawan` (`id_karyawan`, `nama_karyawan`, `jk`, `tempat_lahir`, `t
 --
 
 CREATE TABLE `kategori` (
-  `id_kategori` varchar(100) NOT NULL,
-  `nama_kategori` varchar(100) NOT NULL
+  `id_kategori` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_kategori` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `kategori`
+--
+
+INSERT INTO `kategori` (`id_kategori`, `nama_kategori`) VALUES
+('2b58f202-4794-11f0-99ab-f4b3012bd4f4', 'Celebration'),
+('3846054f-4794-11f0-99ab-f4b3012bd4f4', 'Vacation'),
+('3fec3a8a-4794-11f0-99ab-f4b3012bd4f4', 'Other'),
+('cat1', 'Exhibition'),
+('cat2', 'Gathering'),
+('cat3', 'Training');
 
 -- --------------------------------------------------------
 
@@ -93,7 +107,7 @@ CREATE TABLE `kontak` (
   `no_hp` varchar(100) NOT NULL,
   `subject` varchar(100) NOT NULL,
   `pesan` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `kontak`
@@ -110,16 +124,16 @@ INSERT INTO `kontak` (`id_kontak`, `nama`, `no_hp`, `subject`, `pesan`) VALUES
 --
 
 CREATE TABLE `pelanggan` (
-  `id_pelanggan` varchar(100) NOT NULL,
-  `nama_pelanggan` varchar(100) NOT NULL,
-  `jk` varchar(2) NOT NULL,
-  `tempat_lahir` varchar(100) NOT NULL,
+  `id_pelanggan` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_pelanggan` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `jk` varchar(2) COLLATE utf8mb4_general_ci NOT NULL,
+  `tempat_lahir` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `tgl_lahir` date NOT NULL,
-  `alamat` varchar(100) NOT NULL,
-  `no_telp` varchar(100) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `role` int(11) NOT NULL
+  `alamat` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `no_telp` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `role` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -140,10 +154,10 @@ INSERT INTO `pelanggan` (`id_pelanggan`, `nama_pelanggan`, `jk`, `tempat_lahir`,
 --
 
 CREATE TABLE `pengguna` (
-  `id_pengguna` varchar(100) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `role` int(11) NOT NULL
+  `id_pengguna` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `role` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -160,12 +174,12 @@ INSERT INTO `pengguna` (`id_pengguna`, `username`, `password`, `role`) VALUES
 --
 
 CREATE TABLE `service` (
-  `id_service` varchar(100) NOT NULL,
-  `nama_service` varchar(100) NOT NULL,
-  `id_kategori` varchar(100) NOT NULL,
-  `biaya` int(11) NOT NULL,
-  `durasi` varchar(100) NOT NULL,
-  `file` varchar(100) NOT NULL
+  `id_service` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_service` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_kategori` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `biaya` int NOT NULL,
+  `durasi` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `file` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -183,10 +197,10 @@ INSERT INTO `service` (`id_service`, `nama_service`, `id_kategori`, `biaya`, `du
 --
 
 CREATE TABLE `tbl_faq` (
-  `tbl_faq_id` int(11) NOT NULL,
+  `tbl_faq_id` int NOT NULL,
   `question` text NOT NULL,
   `answer` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_faq`
@@ -208,8 +222,8 @@ CREATE TABLE `testimoni` (
   `id_testimoni` varchar(100) NOT NULL,
   `nama_testimoni` varchar(100) NOT NULL,
   `ket` varchar(100) NOT NULL,
-  `tgl_testimoni` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `tgl_testimoni` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -224,10 +238,10 @@ CREATE TABLE `transaksi` (
   `tgl_transaksi` date NOT NULL,
   `id_service` varchar(100) NOT NULL,
   `bukti` varchar(100) DEFAULT NULL,
-  `status` int(11) NOT NULL,
+  `status` int NOT NULL,
   `tgl_booking` date NOT NULL,
-  `jam` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `jam` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transaksi`
@@ -319,7 +333,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `tbl_faq`
 --
 ALTER TABLE `tbl_faq`
-  MODIFY `tbl_faq_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=315781;
+  MODIFY `tbl_faq_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=315781;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -150,7 +150,7 @@ $this->db->limit(3);
                 $this->db->where('g.id_kategori', $id);
                 $this->db->order_by('g.tgl_upload desc');
 
-                $query = $this->db->get();
+                       $query = $this->db->get();
                 return $query->result();
         }
 	function get_testimoni_all()
@@ -176,7 +176,15 @@ $this->db->limit(3);
 	}
 	function get_kategori()
 	{
+        function get_kategori()
+        {
+                $this->db->select('*');
+                $this->db->from('kategori');
+                $this->db->order_by('nama_kategori asc');
 
 		$this->db->select('*');
 	}
+                $query = $this->db->get();
+                return $query->result();
+        }
 }
