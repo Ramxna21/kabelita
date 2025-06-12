@@ -50,9 +50,8 @@ class Admin extends CI_Controller
      {
          $data = array(
              'judul' => 'Berita',
-            'dt_gallery' => $this->m_umum->get_data('gallery'),
-            'dt_gallery' => $this->m_umum->get_gallery_all(),
-            'dt_kategori' => $this->m_umum->get_data('kategori'),
+             'dt_gallery' => $this->m_umum->get_gallery_all(),
+             'dt_kategori' => $this->m_umum->get_data('kategori'), // Hanya untuk dropdown
          );
          $this->template->load('admin/template', 'admin/gallery', $data);
      }
@@ -102,7 +101,7 @@ class Admin extends CI_Controller
          $res = $this->m_umum->UpdateData('gallery', $data_update, $where);
  
          if ($res) {
-             $this->session->set_flashdata('success_update', 'Data berhasil diupdate!');
+          //   $this->session->set_flashdata('success_update', 'Data berhasil diupdate!');
          } else {
              $this->session->set_flashdata('error_update', 'Gagal mengupdate data.');
          }
@@ -113,7 +112,7 @@ class Admin extends CI_Controller
      public function delete_gallery($id)
      {
          $this->m_umum->hapus('gallery', 'id_gallery', $id);
-         $this->session->set_flashdata('delete', 'Data berhasil dihapuskan');
+        // $this->session->set_flashdata('delete', 'Data berhasil dihapuskan');
          redirect('admin/gallery');
      }
  
@@ -135,18 +134,86 @@ class Admin extends CI_Controller
         $data_update = array('nama_kategori' => $nama);
         $where = array('id_kategori' => $id);
         $this->m_umum->UpdateData('kategori', $data_update, $where);
-        $this->session->set_flashdata('success_update', 'Data berhasil diupdate!');
+       // $this->session->set_flashdata('success_update', 'Data berhasil diupdate!');
         redirect('admin/gallery');
     }
 
     public function delete_kategori($id)
     {
         $this->m_umum->hapus('kategori', 'id_kategori', $id);
-        $this->session->set_flashdata('delete', 'Data berhasil dihapuskan');
+       // $this->session->set_flashdata('delete', 'Data berhasil dihapuskan');
         redirect('admin/gallery');
     }
 
      // =====================
      // Fungsi Tambahan Lainnya Bisa Ditambah di Sini
      // =====================
- }
+
+    // =====================
+    // Kategori Management (Halaman Terpisah)
+    // =====================
+    public function kategori()
+    {
+        $data = array(
+            'judul' => 'Data Kategori',
+            'dt_kategori' => $this->m_umum->get_data('kategori'),
+        );
+        $this->template->load('admin/template', 'admin/kategori', $data);
+    }
+
+    public function simpan_kategori_page()
+    {
+        $this->db->set('id_kategori', 'UUID()', FALSE);
+        $nama_kategori = $this->input->post('nama_kategori');
+        $deskripsi = $this->input->post('deskripsi'); // Optional field
+
+        $data = array(
+            'nama_kategori' => $nama_kategori,
+            'deskripsi' => $deskripsi
+        );
+        
+        $this->m_umum->input_data($data, 'kategori');
+        $this->session->set_flashdata('success', 'Kategori berhasil ditambahkan!');
+        redirect('admin/kategori');
+    }
+
+    public function update_kategori_page()
+    {
+        $id = $this->input->post('id_kategori');
+        $nama = $this->input->post('nama_kategori');
+        $deskripsi = $this->input->post('deskripsi');
+        
+        $data_update = array(
+            'nama_kategori' => $nama,
+            'deskripsi' => $deskripsi
+        );
+        
+        $where = array('id_kategori' => $id);
+        $res = $this->m_umum->UpdateData('kategori', $data_update, $where);
+        
+        if ($res) {
+            $this->session->set_flashdata('success_update', 'Kategori berhasil diupdate!');
+        } else {
+            $this->session->set_flashdata('error_update', 'Gagal mengupdate kategori.');
+        }
+        
+        redirect('admin/kategori');
+    }
+
+    public function delete_kategori_page($id)
+    {
+        // Cek apakah kategori masih digunakan oleh berita
+        $check_usage = $this->db->get_where('gallery', array('id_kategori' => $id));
+        
+        if ($check_usage->num_rows() > 0) {
+            $this->session->set_flashdata('error', 'Kategori tidak dapat dihapus karena masih digunakan oleh berita!');
+        } else {
+            $this->m_umum->hapus('kategori', 'id_kategori', $id);
+            $this->session->set_flashdata('delete', 'Kategori berhasil dihapus!');
+        }
+        
+        redirect('admin/kategori');
+    }
+
+    // Update method gallery untuk menghilangkan manajemen kategori
+}

@@ -1,10 +1,54 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $judul; ?></h1>
-        <a data-toggle="modal" data-target="#add" href="#" class="btn btn-sm btn-info shadow-sm">
-            <i class="fas fa-plus-circle fa-sm"></i> Data Baru
-        </a>
+        <div>
+            <a href="<?= base_url('admin/kategori'); ?>" class="btn btn-sm btn-secondary shadow-sm mr-2">
+                <i class="fas fa-tags fa-sm"></i> Kelola Kategori
+            </a>
+            <a data-toggle="modal" data-target="#add" href="#" class="btn btn-sm btn-info shadow-sm">
+                <i class="fas fa-plus-circle fa-sm"></i> Data Baru
+            </a>
+        </div>
     </div>
+
+    <!-- Flash Messages -->
+    <?php
+/*
+if ($this->session->flashdata('success')):
+?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Berhasil!</strong> Data berita berhasil disimpan.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php
+endif;
+
+if ($this->session->flashdata('success_update')):
+?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Berhasil!</strong> <?= $this->session->flashdata('success_update'); ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php
+endif;
+
+if ($this->session->flashdata('delete')):
+?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Berhasil!</strong> <?= $this->session->flashdata('delete'); ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php
+endif;
+*/
+?>
+
 
     <!-- DataTables Example -->
     <div class="card shadow mb-4">
@@ -64,50 +108,39 @@
         </div>
     </div>
 
-    <!-- Kategori Section -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <div class="d-sm-flex align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-info">Data Kategori</h6>
-                <a data-toggle="modal" data-target="#addKategori" href="#" class="btn btn-sm btn-info shadow-sm">
-                    <i class="fas fa-plus-circle fa-sm"></i> Tambah Kategori
-                </a>
+    <!-- Statistik Cards -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Berita</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= count($dt_gallery); ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-newspaper fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th width="10%">No</th>
-                            <th width="70%">Nama Kategori</th>
-                            <th width="20%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                        $no = 1; 
-                        foreach($dt_kategori as $k): ?>
-                            <tr>
-                                <td class="text-center"><?= $no++; ?></td>
-                                <td><?= $k->nama_kategori; ?></td>
-                                <td class="text-center">
-                                    <div class="btn-group" role="group">
-                                        <a class="btn btn-sm btn-info" data-toggle="modal" 
-                                           data-target="#editKat<?= $k->id_kategori; ?>" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a class="btn btn-sm btn-danger" 
-                                           onclick="return confirm('Anda yakin ingin menghapus data ini?')" 
-                                           href="<?= base_url('admin/delete_kategori/'.$k->id_kategori); ?>" title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Kategori</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= count($dt_kategori); ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tags fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -141,6 +174,9 @@
                             <option value="<?= $k->id_kategori; ?>"><?= $k->nama_kategori; ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <small class="form-text text-muted">
+                        <a href="<?= base_url('admin/kategori'); ?>" target="_blank">Kelola Kategori</a>
+                    </small>
                 </div>
                 <div class="form-group">
                     <label for="file">File Foto <span class="text-danger">*</span></label>
@@ -215,57 +251,15 @@
 </div>
 <?php endforeach; ?>
 
-<!-- Modal Tambah Kategori -->
-<div class="modal fade" id="addKategori" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Kategori</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <?php echo form_open('admin/simpan_kategori'); ?>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="nama_kategori">Nama Kategori <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="nama_kategori" name="nama_kategori" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-info">Simpan</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Edit Kategori -->
-<?php foreach($dt_kategori as $kat): ?>
-<div class="modal fade" id="editKat<?= $kat->id_kategori; ?>" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Kategori</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <?php echo form_open('admin/update_kategori'); ?>
-            <div class="modal-body">
-                <input type="hidden" name="id_kategori" value="<?= $kat->id_kategori; ?>">
-                <div class="form-group">
-                    <label for="nama_kategori_edit">Nama Kategori <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="nama_kategori" value="<?= $kat->nama_kategori; ?>" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-info">Update</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-<?php endforeach; ?>
+<script>
+$(document).ready(function() {
+    $('#dataTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
+        }
+    });
+    
+    // Initialize tooltips
+    $('[data-tooltip="tooltip"]').tooltip();
+});
+</script>

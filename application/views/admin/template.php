@@ -112,6 +112,7 @@
                         
                         <a class="collapse-item" href="<?= base_url('admin/gallery'); ?>">Berita</a>   
                         <a class="collapse-item" href="<?= base_url('admin_faq'); ?>">FAQ</a>
+                        <a class="collapse-item" href="<?= base_url('admin/kategori'); ?>">KATEGORI</a>
                     </div>
                 </div>
             </li>
