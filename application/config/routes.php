@@ -60,5 +60,6 @@ $route['admin_faq/simpan_faq'] = 'admin_faq/simpan_faq';
 $route['admin_faq/update_faq'] = 'admin_faq/update_faq';
 $route['admin_faq/delete_faq/(:any)'] = 'admin_faq/delete_faq/$1';
 $route['admin_faq/edit/(:any)'] = 'admin_faq/edit/$1';
+$route["site/gallery/kategori/(:any)"] = "site/gallery_kategori/$1";
 
 // Your other existing routes...

@@ -1,171 +1,271 @@
 <div class="container-fluid">
-
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-<h1 class="h3 mb-0 text-gray-800"><?= $judul; ?></h1>
-<a data-toggle="modal"
-    data-target="#add" href="#" class=" btn btn-sm btn-info shadow-sm"><i
-class="fas fa-plus-circle fa-sm"></i>
-Data Baru</a>
-</div>
-
-
-
-<!-- DataTales Example -->
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-info">Data Berita</h6>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><?= $judul; ?></h1>
+        <a data-toggle="modal" data-target="#add" href="#" class="btn btn-sm btn-info shadow-sm">
+            <i class="fas fa-plus-circle fa-sm"></i> Data Baru
+        </a>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Berita</th>
-                        <th>Keterangan</th>
-                                               <th>File Foto</th>
-                        <th>Opsi</th>
-                    </tr>
-                </thead>
-             
-                <tbody>
-               
-                <?php
-                $no=1;
-                foreach ($dt_gallery as $d):?>
-                  
-                    <tr>
-                        <td><?= $no++; ?></td>
-                        <td><?= $d->nama_gallery; ?></td>
-                        <td><?= $d->ket; ?></td>
 
-                        <td><a href="<?= base_url();?>upload/<?= $d->file;?>"><img width="50px" src="<?= base_url();?>upload/<?= $d->file;?>"></a></td>
-                        <td>
-                          <div align="center"><a class=" btn btn-sm btn-danger shadow-sm"  data-tooltip="tooltip" 
-                          data-bs-placement="top" title="Delete" onclick="return confirm('anda yakin ingin menghapus data ini')"
-                          href="<?php echo base_url('admin/delete_gallery/'.$d->id_gallery);?>">Hapus <i class="fas fa-trash fa-sm"></i>
-                        </a> 
-                        <a class=" btn btn-sm btn-info shadow-sm"  data-tooltip="tooltip"data-bs-placement="top"title="Edit" href="#" data-toggle="modal" data-target="#modaledit<?= $d->id_gallery ?>"
-                        >Edit <i class="fas fa-edit fa-sm"></i></a></div></td>
-                    </tr>
-                    
-                   <?php endforeach; ?>
-                </tbody>
-            </table>
+    <!-- DataTables Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-info">Data Berita</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="5%">No</th>
+                            <th width="20%">Nama Berita</th>
+                            <th width="25%">Keterangan</th>
+                            <th width="15%">Kategori</th>
+                            <th width="15%">File Foto</th>
+                            <th width="20%">Opsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $no = 1;
+                        foreach ($dt_gallery as $d): ?>
+                            <tr>
+                                <td class="text-center"><?= $no++; ?></td>
+                                <td><?= $d->nama_gallery; ?></td>
+                                <td><?= substr($d->ket, 0, 50) . (strlen($d->ket) > 50 ? '...' : ''); ?></td>
+                                <td>
+                                    <span class="badge badge-primary"><?= $d->nama_kategori; ?></span>
+                                </td>
+                                <td class="text-center">
+                                    <a href="<?= base_url(); ?>upload/<?= $d->file; ?>" target="_blank">
+                                        <img width="60px" height="40px" src="<?= base_url(); ?>upload/<?= $d->file; ?>" 
+                                             style="object-fit: cover; border-radius: 5px;" alt="<?= $d->nama_gallery; ?>">
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-sm btn-info" data-toggle="modal" 
+                                           data-target="#modaledit<?= $d->id_gallery ?>" 
+                                           data-tooltip="tooltip" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('Anda yakin ingin menghapus data ini?')"
+                                           href="<?php echo base_url('admin/delete_gallery/'.$d->id_gallery); ?>"
+                                           data-tooltip="tooltip" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kategori Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="d-sm-flex align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-info">Data Kategori</h6>
+                <a data-toggle="modal" data-target="#addKategori" href="#" class="btn btn-sm btn-info shadow-sm">
+                    <i class="fas fa-plus-circle fa-sm"></i> Tambah Kategori
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="10%">No</th>
+                            <th width="70%">Nama Kategori</th>
+                            <th width="20%">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $no = 1; 
+                        foreach($dt_kategori as $k): ?>
+                            <tr>
+                                <td class="text-center"><?= $no++; ?></td>
+                                <td><?= $k->nama_kategori; ?></td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-sm btn-info" data-toggle="modal" 
+                                           data-target="#editKat<?= $k->id_kategori; ?>" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('Anda yakin ingin menghapus data ini?')" 
+                                           href="<?= base_url('admin/delete_kategori/'.$k->id_kategori); ?>" title="Hapus">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Modal Tambah Berita -->
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Tambah Berita</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php echo form_open_multipart('admin/simpan_gallery'); ?>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nama_gallery">Nama Berita <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="nama_gallery" name="nama_gallery" required>
+                </div>
+                <div class="form-group">
+                    <label for="ket">Keterangan <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="ket" name="ket" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="id_kategori">Kategori <span class="text-danger">*</span></label>
+                    <select class="form-control" id="id_kategori" name="id_kategori" required>
+                        <option value="">-- Pilih Kategori --</option>
+                        <?php foreach($dt_kategori as $k): ?>
+                            <option value="<?= $k->id_kategori; ?>"><?= $k->nama_kategori; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="file">File Foto <span class="text-danger">*</span></label>
+                    <input type="file" class="form-control-file" id="file" name="file" accept="image/*,application/pdf" required>
+                    <small class="form-text text-muted">Format: JPG, PNG, JPEG, PDF. Maksimal 3MB.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-info">Simpan</button>
+            </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-
-
-
-<div class="modal" id="add" aria-hidden="true">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-
-<!-- Modal Header -->
-<div class="modal-header">
-<h4 class="modal-title">Tambah Berita</h4>
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-</div>
-<?php  
-echo validation_errors();                       
-echo form_open_multipart('admin/simpan_gallery'); ?>
-
-<!-- Modal body -->
-<div class="modal-body">
-
- 
-
-<div class="mb-3">
-            <label for="exampleInputEmail1">Nama Berita</label>
-            <input type="text" class="form-control" name="nama_gallery" required>
-
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1">Keterangan</label>
-            <input type="text" class="form-control" name="ket" required>
-
-          </div>
-        
-          <div class="mb-3">
-            <label for="exampleInputEmail1">File Foto</label>
-            <input type="file" class="form-control" name="file" required>
-
-          </div>
-  
-</div>
-
-<!-- Modal footer -->
-<div class="modal-footer">
-
-<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-<input type="submit" name="submit"  class="btn btn-info btn-pill" value="Submit">
-
-</div>
-</form>
-</div>
-</div>
-</div>
-
-<?php
-
-foreach ($dt_gallery as $f): ?>
-
-<div class="modal" id="modaledit<?= $f->id_gallery; ?>" aria-hidden="true">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-
-<!-- Modal Header -->
-<div class="modal-header">
-<h4 class="modal-title">Edit Berita</h4>
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-</div>
-<?php  
-echo validation_errors();                       
-echo form_open_multipart('admin/update_gallery'); ?>
-
-<!-- Modal body -->
-<div class="modal-body">
-<input type="hidden" class="form-control" value="<?= $f->id_gallery; ?>" name="id_gallery" required >
-
-
-
-  
-
-  <div class="mb-3">
-            <label for="exampleInputEmail1">Nama Berita</label>
-            <input type="text" class="form-control" name="nama_gallery" value="<?= $f->nama_gallery; ?>" required>
-
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1">Keterangan</label>
-            <input type="text" class="form-control" name="ket" value="<?= $f->ket; ?>" required>
-             <input type="hidden" class="form-control" name="old_file" value="<?= $f->file; ?>" required>
-
-          </div>
- 
-             <div class="mb-3">
-            <label for="exampleInputEmail1">File Foto</label>
-            <input type="file" class="form-control" name="file" >
-
-          </div>
-  
-   
-</div>
-
-<!-- Modal footer -->
-<div class="modal-footer">
-
-<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-<input type="submit" name="submit"  class="btn btn-info btn-pill" value="Update">
-
-</div>
-</form>
-</div>
-</div>
+<!-- Modal Edit Berita -->
+<?php foreach ($dt_gallery as $f): ?>
+<div class="modal fade" id="modaledit<?= $f->id_gallery; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Berita</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php echo form_open_multipart('admin/update_gallery'); ?>
+            <div class="modal-body">
+                <input type="hidden" name="id_gallery" value="<?= $f->id_gallery; ?>">
+                <input type="hidden" name="old_file" value="<?= $f->file; ?>">
+                
+                <div class="form-group">
+                    <label for="nama_gallery_edit">Nama Berita <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="nama_gallery" value="<?= $f->nama_gallery; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="ket_edit">Keterangan <span class="text-danger">*</span></label>
+                    <textarea class="form-control" name="ket" rows="3" required><?= $f->ket; ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="id_kategori_edit">Kategori <span class="text-danger">*</span></label>
+                    <select class="form-control" name="id_kategori" required>
+                        <?php foreach($dt_kategori as $k): ?>
+                            <option value="<?= $k->id_kategori; ?>" <?= $k->id_kategori == $f->id_kategori ? 'selected' : ''; ?>>
+                                <?= $k->nama_kategori; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="file_edit">File Foto</label>
+                    <input type="file" class="form-control-file" name="file" accept="image/*,application/pdf">
+                    <small class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah file. Format: JPG, PNG, JPEG, PDF. Maksimal 3MB.</small>
+                    <?php if($f->file): ?>
+                        <div class="mt-2">
+                            <small class="text-muted">File saat ini: </small>
+                            <a href="<?= base_url(); ?>upload/<?= $f->file; ?>" target="_blank">
+                                <img src="<?= base_url(); ?>upload/<?= $f->file; ?>" width="50" height="35" style="object-fit: cover; border-radius: 3px;">
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-info">Update</button>
+            </div>
+            </form>
+        </div>
+    </div>
 </div>
 <?php endforeach; ?>
 
+<!-- Modal Tambah Kategori -->
+<div class="modal fade" id="addKategori" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Kategori</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php echo form_open('admin/simpan_kategori'); ?>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nama_kategori">Nama Kategori <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="nama_kategori" name="nama_kategori" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-info">Simpan</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Kategori -->
+<?php foreach($dt_kategori as $kat): ?>
+<div class="modal fade" id="editKat<?= $kat->id_kategori; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Kategori</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php echo form_open('admin/update_kategori'); ?>
+            <div class="modal-body">
+                <input type="hidden" name="id_kategori" value="<?= $kat->id_kategori; ?>">
+                <div class="form-group">
+                    <label for="nama_kategori_edit">Nama Kategori <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="nama_kategori" value="<?= $kat->nama_kategori; ?>" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-info">Update</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>

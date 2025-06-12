@@ -59,8 +59,7 @@
 				</div>
 			</section>
 			<!-- End banner Area -->	
-
-			<!-- Start about-info Area -->
+            <!-- Start about-info Area -->
 			<section class="other-issue-area section-gap">
     <div class="container">
         <div class="row">
@@ -84,6 +83,7 @@
                                 
                                 
                                 <h4><?= $d->nama_gallery; ?></h4>
+                                <p><small><?= $d->nama_kategori; ?></small></p>
                                 <p><?= $d->ket; ?></p>
                             </div>
                         </div>
@@ -92,17 +92,15 @@
             </div>
 
             <!-- Kolom Kategori -->
-            <div class="col-lg-3">
+         <div class="col-lg-3">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h3 class="text-center">Categories</h3>
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="#">Exhibition</a></li>
-                            <li class="list-group-item"><a href="#">Gathering</a></li>
-                            <li class="list-group-item"><a href="#">Training</a></li>
-                            <li class="list-group-item"><a href="#">Celebration</a></li>
-                            <li class="list-group-item"><a href="#">Vacation</a></li>
-                            <li class="list-group-item"><a href="#">Others</a></li>
+                          
+                            <?php foreach($dt_kategori as $k): ?>
+                            <li class="list-group-item"><a href="<?= base_url('site/gallery/kategori/'.$k->id_kategori); ?>"><?= $k->nama_kategori; ?></a></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>

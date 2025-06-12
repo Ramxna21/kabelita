@@ -117,27 +117,42 @@ $this->db->limit(3);
 
 	
 
-	function get_gallery()
-	{
+	// function get_gallery() removed due to duplicate declaration
+        function get_gallery()
+        {
 
-		$this->db->select('*');
-		$this->db->from('gallery');
-		$this->db->order_by('tgl_upload desc');
-		$this->db->limit(4);
+                $this->db->select('g.*, k.nama_kategori');
+                $this->db->from('gallery g');
+                $this->db->join('kategori k', 'g.id_kategori=k.id_kategori', 'left');
+                $this->db->order_by('g.tgl_upload desc');
+                $this->db->limit(4);
 
-		$query = $this->db->get();
-		return $query->result();
-	}
-	function get_gallery_all()
-	{
+                $query = $this->db->get();
+                return $query->result();
+        }
+        function get_gallery_all()
+        {
 
-		$this->db->select('*');
-		$this->db->from('gallery');
-		$this->db->order_by('tgl_upload desc');
+                $this->db->select('g.*, k.nama_kategori');
+                $this->db->from('gallery g');
+                $this->db->join('kategori k', 'g.id_kategori=k.id_kategori', 'left');
+                $this->db->order_by('g.tgl_upload desc');
 
-		$query = $this->db->get();
-		return $query->result();
-	}
+                $query = $this->db->get();
+                return $query->result();
+        }
+
+        function get_gallery_by_kategori($id)
+        {
+                $this->db->select('g.*, k.nama_kategori');
+                $this->db->from('gallery g');
+                $this->db->join('kategori k', 'g.id_kategori=k.id_kategori', 'left');
+                $this->db->where('g.id_kategori', $id);
+                $this->db->order_by('g.tgl_upload desc');
+
+                $query = $this->db->get();
+                return $query->result();
+        }
 	function get_testimoni_all()
 	{
 
@@ -163,51 +178,5 @@ $this->db->limit(3);
 	{
 
 		$this->db->select('*');
-		$this->db->from('kategori');
-		$this->db->limit(6);
-
-		$query = $this->db->get();
-		return $query->result();
-	}
-	function get_pesanan_saya()
-	{
-
- $id_pelanggan=$this->session->userdata('id_pelanggan');
-		$this->db->select('*');
-		$this->db->from('transaksi a');
-		$this->db->join('service b', 'a.id_service=b.id_service', '');
-		$this->db->join('pelanggan c', 'a.id_pelanggan=c.id_pelanggan', '');
-		$this->db->where('a.id_pelanggan',$id_pelanggan);
-	$this->db->order_by('tgl_transaksi desc');
-		$query = $this->db->get();
-		return $query->result();
-	}
-	function get_transaksi()
-	{
-
-		$this->db->select('*');
-		$this->db->from('transaksi a');
-		$this->db->join('service b', 'a.id_service=b.id_service', '');
-		$this->db->join('pelanggan c', 'a.id_pelanggan=c.id_pelanggan', '');
-	$this->db->order_by('tgl_transaksi desc');
-		$query = $this->db->get();
-		return $query->result();
-	}
-	function get_transaksi_keuangan($dari,$sampai)
-	{
-
-		$this->db->select('*');
-		$this->db->from('transaksi a');
-		$this->db->join('service b', 'a.id_service=b.id_service', '');
-		$this->db->join('pelanggan c', 'a.id_pelanggan=c.id_pelanggan', '');
-     	$this->db->where('a.tgl_booking between "'.$dari.'" and "'.$sampai.'"');
-     	$this->db->where('a.status',4);
-		$query = $this->db->get();
-		return $query->result();
-	}
-	
-	function get_booking_slot($tgl,$jam,$id_service){
-		$query=$this->db->query("select * from transaksi where tgl_booking='$tgl' AND jam='$jam' AND id_service='$id_service' ");
-		return $query;
 	}
 }

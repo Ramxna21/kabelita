@@ -75,53 +75,69 @@ class Site extends CI_Controller{
         else {
         $this->m_umum->input_data($data, 'pelanggan');
             $notif = "Register Berhasil Silahkan Login";
-            $this->session->set_flashdata('success');
-            redirect('site');
-          }
+             $this->session->set_flashdata('success');
+             redirect('site');
+           }
+ 
+     }
+      public function about()
+     {
+   $data = array(
+            'judul' => 'Tentang Kami',
+          
+           
+            
+         );
+         $this->template->load('site/template2', 'site/about', $data);
+     }
+      public function service()
+     {
+   $data = array(
+            'judul' => 'Produk Kami',
+          'dt_service' => $this->m_umum->get_service(),
+           
+            
+         );
+         $this->template->load('site/template2', 'site/service', $data);
+     }
 
-    }
-     public function about()
-    {
-  $data = array(
-           'judul' => 'Tentang Kami',
-         
-          
-           
-        );
-        $this->template->load('site/template2', 'site/about', $data);
-    }
-     public function service()
-    {
-  $data = array(
-           'judul' => 'Produk Kami',
-         'dt_service' => $this->m_umum->get_service(),
-          
-           
-        );
-        $this->template->load('site/template2', 'site/service', $data);
-    }
-     public function gallery()
-    {
-  $data = array(
-           'judul' => 'Berita Terbaru',
+    public function gallery()
+     {
+   $data = array(
+            'judul' => 'Berita Terbaru',
           'dt_gallery' => $this->m_umum->get_gallery_all(),
           
-           
+         'dt_gallery' => $this->m_umum->get_gallery_all(),
+         'dt_kategori' => $this->m_umum->get_data('kategori'),
+
+
         );
         $this->template->load('site/template2', 'site/gallery', $data);
     }
 
-    public function credibility()
+    public function gallery_kategori($id)
     {
   $data = array(
-        'judul' => 'Credibility',
-        'dt_credibility' => $this->m_umum->get_credibility(),
-
-        );
-        $this->template->load('user/template', 'user/credibility', $data);
-    }
-
-}
+           'judul' => 'Berita Terbaru',
+         'dt_gallery' => $this->m_umum->get_gallery_by_kategori($id),
+         'dt_kategori' => $this->m_umum->get_data('kategori'),
 
 
+         );
+         $this->template->load('site/template2', 'site/gallery', $data);
+     }
  
+     public function credibility()
+     {
+   $data = array(
+         'judul' => 'Credibility',
+         'dt_credibility' => $this->m_umum->get_credibility(),
+ 
+         );
+         $this->template->load('user/template', 'user/credibility', $data);
+     }
+ 
+ }
+ 
+ 
+  
